@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -56,15 +57,14 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         UsernamePasswordAuthenticationToken authToken = 
             new UsernamePasswordAuthenticationToken(username, password);
-        System.out.println("JWTAuthenticationFilter.attemptAuthentication() " + authToken);
+        
         return authenticationManager.authenticate(authToken);
 
     }
 
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, 
-            Authentication authResult) throws IOException {
-        
-        System.out.println("JWTAuthenticationFilter.successfulAuthentication() " + authResult.getName());
+    @Override
+    public void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                FilterChain chain, Authentication authResult) throws IOException {
         
         String username = ((org.springframework.security.core.userdetails.User) authResult.getPrincipal()).getUsername();
         Collection<? extends GrantedAuthority> roles = authResult.getAuthorities();

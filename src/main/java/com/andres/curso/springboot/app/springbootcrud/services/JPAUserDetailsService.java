@@ -37,11 +37,16 @@ public class JPAUserDetailsService implements  UserDetailsService {
         List<GrantedAuthority> authorities = user.getRoles().stream()
             .map(role -> new SimpleGrantedAuthority(role.getName()))
             .collect(Collectors.toList());
-        System.out.println("Authorities: " + user.getPassword());
-        return new org.springframework.security.core.userdetails.User(
-            user.getUsername(), 
-            user.getPassword(), 
-            true, true, true, true, authorities
+            
+        return org.springframework.security.core.userdetails.User.builder()
+            .username(user.getUsername())
+            .password(user.getPassword())
+            .disabled(false)
+            .accountExpired(false)
+            .accountLocked(false)
+            .credentialsExpired(false)
+            .authorities(authorities)
+            .build(
         );
     }
 
