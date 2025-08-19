@@ -31,7 +31,7 @@ public class UserController {
     
     @GetMapping
     public List<User> list() {
-        return userService.findAll();
+        return  userService.findAll();
     }
     
     @PostMapping
